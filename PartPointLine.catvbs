@@ -1,0 +1,51 @@
+Language="VBSCRIPT"
+
+Sub CATMain()
+
+Set documents1 = CATIA.Documents
+
+Set partDocument1 = documents1.Add("Part")
+
+Set specsAndGeomWindow1 = CATIA.ActiveWindow
+
+specsAndGeomWindow1.WindowState = catWindowStateMaximized
+
+Set part1 = partDocument1.Part
+
+Set hybridShapeFactory1 = part1.HybridShapeFactory
+
+Set hybridShapePointCoord1 = hybridShapeFactory1.AddNewPointCoord(0.000000, 0.000000, 0.000000)
+
+Set axisSystems1 = part1.AxisSystems
+
+Set axisSystem1 = axisSystems1.Item("Absolute Axis System")
+
+Set reference1 = part1.CreateReferenceFromObject(axisSystem1)
+
+hybridShapePointCoord1.RefAxisSystem = reference1
+
+Set hybridBodies1 = part1.HybridBodies
+
+Set hybridBody1 = hybridBodies1.Item("Geometrical Set.1")
+
+hybridBody1.AppendHybridShape hybridShapePointCoord1
+
+part1.InWorkObject = hybridShapePointCoord1
+
+part1.Update 
+
+Set reference2 = part1.CreateReferenceFromObject(hybridShapePointCoord1)
+
+Set reference3 = part1.CreateReferenceFromBRepName("REdge:(Edge:(Face:(Brp:(AxisSystem.1;3);None:();Cf11:());Face:(Brp:(AxisSystem.1;2);None:();Cf11:());None:(Limits1:();Limits2:());Cf11:());WithPermanentBody;WithoutBuildError;WithSelectingFeatureSupport;MFBRepVersion_CXR15)", axisSystem1)
+
+Set hybridShapeDirection1 = hybridShapeFactory1.AddNewDirection(reference3)
+
+Set hybridShapeLinePtDir1 = hybridShapeFactory1.AddNewLinePtDir(reference2, hybridShapeDirection1, 0.000000, 52.000000, False)
+
+hybridBody1.AppendHybridShape hybridShapeLinePtDir1
+
+part1.InWorkObject = hybridShapeLinePtDir1
+
+part1.Update 
+
+End Sub

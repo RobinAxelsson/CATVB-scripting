@@ -1,0 +1,25 @@
+'Assume a single part is open in its own window.
+ 
+'Declare variables
+Dim objSel As Selection
+Dim objPart As Part
+ 
+'Get at the selection object and the part
+Set objSel = CATIA.ActiveDocument.Selection
+Set objPart = CATIA.ActiveDocument.Part
+ 
+'Clear the selection to prevent any currently
+'selected items from getting deleted
+objSel.Clear
+ 
+'Select the first geometrical set in the part
+objSel.Add objPart.HybridBodies.Item(1)
+ 
+'Select the body named “Body.2”
+objSel.Add objPart.Bodies.Item(“Body.2”)
+ 
+'Select the parameter named “Length.1”
+objSel.Add objPart.Parameters.Item(“Length.1”)
+ 
+'Delete the currently selected items
+objSel.Delete

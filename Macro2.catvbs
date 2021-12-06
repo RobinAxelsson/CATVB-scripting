@@ -1,0 +1,55 @@
+Language="VBSCRIPT"
+
+Sub CATMain()
+
+Set partDocument1 = CATIA.ActiveDocument
+
+Set part1 = partDocument1.Part
+
+Set hybridShapeFactory1 = part1.HybridShapeFactory
+
+Set hybridShapePointCoord1 = hybridShapeFactory1.AddNewPointCoord(0.000000, 0.000000, 44.000000)
+
+Set parameters1 = part1.Parameters
+
+Set hybridShapePointExplicit1 = parameters1.Item("Point.2")
+
+Set reference1 = part1.CreateReferenceFromObject(hybridShapePointExplicit1)
+
+hybridShapePointCoord1.PtRef = reference1
+
+Set hybridBodies1 = part1.HybridBodies
+
+Set hybridBody1 = hybridBodies1.Item("Geometrical Set.1")
+
+hybridBody1.AppendHybridShape hybridShapePointCoord1
+
+part1.InWorkObject = hybridShapePointCoord1
+
+part1.Update 
+
+Set hybridShapePointCoord2 = hybridShapeFactory1.AddNewPointCoord(0.000000, 0.000000, 44.000000)
+
+Set reference2 = part1.CreateReferenceFromObject(hybridShapePointCoord1)
+
+hybridShapePointCoord2.PtRef = reference2
+
+hybridBody1.AppendHybridShape hybridShapePointCoord2
+
+part1.InWorkObject = hybridShapePointCoord2
+
+part1.Update 
+
+Set hybridShapePointCoord3 = hybridShapeFactory1.AddNewPointCoord(0.000000, 0.000000, 44.000000)
+
+Set reference3 = part1.CreateReferenceFromObject(hybridShapePointCoord2)
+
+hybridShapePointCoord3.PtRef = reference3
+
+hybridBody1.AppendHybridShape hybridShapePointCoord3
+
+part1.InWorkObject = hybridShapePointCoord3
+
+part1.Update 
+
+End Sub

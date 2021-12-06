@@ -1,0 +1,16 @@
+Attribute VB_Name = "Modul1"
+Sub CATMain()
+
+MsgBox ("hello world")
+
+Set partDocument1 = CATIA.ActiveDocument
+
+Set part1 = partDocument1.Part
+
+Set hybridbodies1 = part1.HybridBodies
+
+Set hybridbody1 = hybridbodies1.Add()
+
+Set hybridShapeFactory1 = part1.HybridShapeFactory
+
+End Sub

@@ -1,0 +1,160 @@
+Imports INFITF
+
+Module Module1
+    Public CATIA As Application = GetObject(, "CATIA.APPLICATION")
+    Sub Main()
+
+        Dim partDocument1 = CATIA.ActiveDocument
+
+        Dim part1 = partDocument1.Part
+
+        Dim hybridBodies1 = part1.HybridBodies
+
+        Dim hybridBody1 = hybridBodies1.Add() 'Creates GeoSet
+
+        Dim hybridShapeFactory1 = part1.HybridShapeFactory 'Creates 2 more set?
+
+        'Dim a = InputBox("How big do you want your cube my Lord?")
+        Dim a = 10
+
+        'Dim MyVPOrigin(2)
+
+        'CATIA.ActiveWindow.ActiveViewer.Viewpoint3D.GetOrigin(MyVPOrigin)
+
+        Dim x = a 'MyVPOrigin(0)
+
+        Dim y = a 'MyVPOrigin(1)
+
+        Dim z = a 'MyVPOrigin(2)
+
+        Dim hybridShapePointCoord1 = hybridShapeFactory1.AddNewPointCoord(x, y, z)
+
+        hybridBody1.AppendHybridShape(hybridShapePointCoord1)
+
+        part1.InWorkObject = hybridShapePointCoord1
+
+        part1.Update
+
+        Dim reference1 = part1.CreateReferenceFromObject(hybridShapePointCoord1)
+
+        Dim hybridShapePointExplicit1 = hybridShapeFactory1.AddNewPointDatum(reference1)
+
+        hybridBody1.AppendHybridShape(hybridShapePointExplicit1)
+
+        part1.InWorkObject = hybridShapePointExplicit1
+
+        part1.Update
+
+        Dim v = hybridShapeFactory1.DeleteObjectForDatum(reference1)
+
+        Dim reference2 = part1.CreateReferenceFromObject(hybridShapePointExplicit1)
+
+        Dim hybridShapeDirection1 = hybridShapeFactory1.AddNewDirectionByCoord(0.000000, 0.000000, 1.0)
+
+        Dim hybridShapeLinePtDir1 = hybridShapeFactory1.AddNewLinePtDir(reference2, hybridShapeDirection1, -a, a, False)
+
+        hybridBody1.AppendHybridShape(hybridShapeLinePtDir1)
+
+        part1.InWorkObject = hybridShapeLinePtDir1
+
+        part1.Update
+
+        Dim reference3 = part1.CreateReferenceFromObject(hybridShapeLinePtDir1)
+
+        Dim hybridShapeLineExplicit1 = hybridShapeFactory1.AddNewLineDatum(reference3)
+
+        hybridBody1.AppendHybridShape(hybridShapeLineExplicit1)
+
+        part1.InWorkObject = hybridShapeLineExplicit1
+
+        part1.Update
+
+        hybridShapeFactory1.DeleteObjectForDatum(reference3)
+
+        Dim hybridShapeDirection2 = hybridShapeFactory1.AddNewDirectionByCoord(1.0, 0.000000, 0.000000)
+
+        Dim reference4 = part1.CreateReferenceFromObject(hybridShapeLineExplicit1)
+
+        Dim hybridShapeExtrude1 = hybridShapeFactory1.AddNewExtrude(reference4, a, a, hybridShapeDirection2)
+
+        hybridShapeExtrude1.SymmetricalExtension = 0
+
+        hybridBody1.AppendHybridShape(hybridShapeExtrude1)
+
+        part1.InWorkObject = hybridShapeExtrude1
+
+        part1.Update
+
+        Dim reference5 = part1.CreateReferenceFromObject(hybridShapeExtrude1)
+
+        Dim hybridShapeSurfaceExplicit1 = hybridShapeFactory1.AddNewSurfaceDatum(reference5)
+
+        hybridBody1.AppendHybridShape(hybridShapeSurfaceExplicit1)
+
+        part1.InWorkObject = hybridShapeSurfaceExplicit1
+
+        part1.Update
+
+        hybridShapeFactory1.DeleteObjectForDatum(reference5)
+
+        Dim bodies1 = part1.Bodies
+
+        Dim body1 = bodies1.Add()
+
+        part1.Update
+
+        Dim shapeFactory1 = part1.ShapeFactory
+
+        Dim reference6 = part1.CreateReferenceFromName("")
+
+        Dim thickSurface1 = shapeFactory1.AddNewThickSurface(reference6, 0, 1.0, 0.000000)
+
+        Dim length1 = thickSurface1.TopOffset
+
+        length1.Value = a
+
+        Dim length2 = thickSurface1.BotOffset
+
+        length2.Value = a
+
+        Dim reference7 = part1.CreateReferenceFromObject(hybridShapeSurfaceExplicit1)
+
+        thickSurface1.Surface = reference7
+
+        part1.Update
+
+        partDocument1 = CATIA.ActiveDocument
+
+        Dim selection1 = partDocument1.Selection
+
+        selection1.Clear
+
+        selection1.Add(body1)
+
+        selection1.Copy
+
+        partDocument1 = CATIA.ActiveDocument
+
+        Dim selection2 = partDocument1.Selection
+
+        selection2.Clear
+
+        selection2.Add(part1)
+
+        selection2.PasteSpecial("CATPrtResultWithOutLink")
+
+        partDocument1 = CATIA.ActiveDocument
+
+        Dim selection3 = partDocument1.Selection
+
+        selection3.Clear
+
+        selection3.Add(body1)
+
+        selection3.Add(hybridBody1)
+
+        selection3.Delete
+
+    End Sub
+
+End Module

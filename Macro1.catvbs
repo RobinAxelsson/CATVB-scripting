@@ -1,0 +1,31 @@
+Language="VBSCRIPT"
+
+Sub CATMain()
+
+Set partDocument1 = CATIA.ActiveDocument
+
+Set part1 = partDocument1.Part
+
+Set hybridShapeFactory1 = part1.HybridShapeFactory
+
+Set hybridShapePointCoord1 = hybridShapeFactory1.AddNewPointCoord(0.000000, 0.000000, 0.000000)
+
+Set axisSystems1 = part1.AxisSystems
+
+Set axisSystem1 = axisSystems1.Item("Absolute Axis System")
+
+Set reference1 = part1.CreateReferenceFromObject(axisSystem1)
+
+hybridShapePointCoord1.RefAxisSystem = reference1
+
+Set hybridBodies1 = part1.HybridBodies
+
+Set hybridBody1 = hybridBodies1.Item("Geometrical Set.32")
+
+hybridBody1.AppendHybridShape hybridShapePointCoord1
+
+part1.InWorkObject = hybridShapePointCoord1
+
+part1.Update 
+
+End Sub
